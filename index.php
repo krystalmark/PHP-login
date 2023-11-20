@@ -1,23 +1,44 @@
+<?php
+  session_start();
+
+  require 'database.php';
+
+  if (isset($_SESSION['user_id'])) {
+    $records = $conn->prepare('SELECT id, email, password FROM users WHERE id = :id');
+    $records->bindParam(':id', $_SESSION['user_id']);
+    $records->execute();
+    $results = $records->fetch(PDO::FETCH_ASSOC);
+
+    $user = null;
+
+    if (count($results) > 0) {
+      $user = $results;
+    }
+  }
+?>
+
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Welcome to you WebApp</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body>
+    <?php require 'partials/header.php' ?>
 
-<h2>Login Form</h2>
+    <?php if(!empty($user)): ?>
+      <br> Welcome. <?= $user['email']; ?>
+      <br>You are Successfully Logged In
+      <a href="logout.php">
+        Logout
+      </a>
+    <?php else: ?>
+      <h1>Please Login or SignUp</h1>
 
-<form action="login.php" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br>
-
-    <input type="submit" value="Login">
-</form>
-
-</body>
+      <a href="login.php">Login</a> or
+      <a href="signup.php">SignUp</a>
+    <?php endif; ?>
+  </body>
 </html>
