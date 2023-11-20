@@ -1,18 +1,14 @@
-<?php 
-    ob_start();
-    if(!isset($_SESSION)) {
-        session_start();
-    }
-    $hostname = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "php-project";
-    
-    $connection = mysqli_connect($hostname, $username, $password, $dbname) ;
+<?php
 
-    if (!$connection) {
-        die("Connection failed: " . mysqli_connect_error());
-    } else {
-     //   echo "Connected successfully to the database!";
-    }
+$server = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'php login';
+
+try {
+  $conn = new PDO("mysql:host=$server;dbname=$database;", $username, $password);
+} catch (PDOException $e) {
+  die('Connection Failed: ' . $e->getMessage());
+}
+
 ?>
